@@ -45,6 +45,30 @@ begin
   end;
 end;
 
+function FindFirstVariableName(_Path: string): String;
+var
+  VariableStartPosition: Integer;
+  VariableEndPosition: Integer;
+  tmpPath: string;
+begin
+  VariableStartPosition := Pos('$(', _Path)+2;
+  tmpPath := Copy(_Path, VariableStartPosition, Length(_Path));
+  VariableEndPosition := Pos(')', tmpPath)-1;
+  Result := Copy(tmpPath, 1, VariableEndPosition);
+end;
+
+procedure ReplaceEnvironmentVariables(var _Path: string);
+var
+  VariableName: string;
+  VariableValue: string;
+begin
+  while Pos('$(', _Path)>0 do begin
+    VariableName := FindFirstVariableName(_Path);
+    VariableValue := GetEnvironmentVariable(VariableName);
+    _Path := StringReplace(_Path, '$(' + VariableName + ')', VariableValue, [rfReplaceAll, rfIgnoreCase]);
+  end;
+end;
+
 function Main: integer;
 var
   DofFn: string;
@@ -342,16 +366,19 @@ begin
     // Unit directories
     s := Dof.ReadString('Directories', 'SearchPath', '');
     ReplaceDelphi(FileVersion, s);
+    ReplaceEnvironmentVariables(s);
     cfg.Add('-U"' + s + '"');
 
     // Object directories
     s := Dof.ReadString('Directories', 'SearchPath', '');
     ReplaceDelphi(FileVersion, s);
+    ReplaceEnvironmentVariables(s);
     cfg.Add('-O"' + s + '"');
 
     // IncludeDirs
     s := Dof.ReadString('Directories', 'SearchPath', '');
     ReplaceDelphi(FileVersion, s);
+    ReplaceEnvironmentVariables(s);
     cfg.Add('-I"' + s + '"');
 
     // look for 8.3 filenames - never used
@@ -363,6 +390,7 @@ begin
     // Resource directories
     s := Dof.ReadString('Directories', 'SearchPath', '');
     ReplaceDelphi(FileVersion, s);
+    ReplaceEnvironmentVariables(s);
     cfg.Add('-R"' + s + '"');
 
     // Conditionals
