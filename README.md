@@ -1,10 +1,21 @@
 # dof2cfg
 
-Tool to generate a <project>.cfg file from the <project>.dof file of a Delphi 5.0 to 7.0 project. The .cfg file is used by the command line compiler.
+This tool generates a .cfg file from a .dof file in a Delphi 5.0 to 7.0 project.
 
-Note: The Delphi IDE does that every time it writes the .dof file so this is only useful if you do not want to start the IDE for this purpose.
+It's useful when you have a build pipeline where the .cfg file is not
+tracked in a version control system. This allows you to update .cfg
+file reflecting what was changed in .dof file.
 
-There is als Bdsproj2cfg which does the same for .bdsproj files used by Delphi 2005 and 2006, search for it on CodeCentral.
+## Background
+
+Delphi IDE works with .dof files to store project metadata, while
+delphi compiler uses .cfg files to read this metadata.
+
+Delphi IDE updates .cfg file every time it writes the .dof file so
+this is useful if you do not want to start the IDE for this purpose.
+
+There is also Bdsproj2cfg which does the same for .bdsproj files used by Delphi
+2005 and 2006, search for it on CodeCentral.
 
 Originally writen by **Thomas Mueller**.
 
