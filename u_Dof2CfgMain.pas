@@ -289,9 +289,10 @@ begin
       cfg.Add('-GS') // with segements
     else if s = '2' then
       cfg.Add('-GP') // with publics
-    else if s = '3' then
-      cfg.Add('-GP') // detailed
-    else
+    else if s = '3' then begin
+      cfg.Add('-GD'); // detailed
+      cfg.Add('-GP'); // with publics
+    end else
       ; // no map file
 
     // OutputObjs
