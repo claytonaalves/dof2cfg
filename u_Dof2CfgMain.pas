@@ -358,10 +358,12 @@ begin
 
     // BplOutputDir
     s := Dof.ReadString('Directories', 'PackageDLLOutputDir', '');
+    ReplaceEnvironmentVariables(s);
     cfg.Add('-LE"' + s + '"');
 
     // DcpOutputDir
     s := Dof.ReadString('Directories', 'PackageDCPOutputDir', '');
+    ReplaceEnvironmentVariables(s);
     cfg.Add('-LN"' + s + '"');
 
     // Unit directories
